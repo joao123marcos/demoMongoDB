@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.JoaoMarcos.demoMongoDB.DTO.UserDTO;
 import com.JoaoMarcos.demoMongoDB.Services.UserService;
-import com.JoaoMarcos.demoMongoDB.domain.User;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -19,8 +19,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
-        List<User> list = userService.findAll();
+    public ResponseEntity<List<UserDTO>> findAll(){
+        List<UserDTO> list = userService.findAll();
         return ResponseEntity.ok().body(list);
     }
     
