@@ -1,15 +1,16 @@
 package com.JoaoMarcos.demoMongoDB.controllers;
 
+import java.net.URI;
 import java.util.List;
 
+import com.JoaoMarcos.demoMongoDB.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.JoaoMarcos.demoMongoDB.DTO.UserDTO;
 import com.JoaoMarcos.demoMongoDB.Services.UserService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -22,6 +23,23 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> findAll(){
         List<UserDTO> list = userService.findAll();
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/{idUser}")
+    public ResponseEntity<UserDTO> findById(@PathVariable String idUser){
+        UserDTO userDTO = userService.findById(idUser);
+        return ResponseEntity.ok().body(userDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> insertUser(@RequestBody UserDTO objDto){
+        User user = userService.fromDTO(objDto);
+        user = userService.insertUser(user);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(user.getId()).toUri();
+
+        return  ResponseEntity.created(uri).build();
     }
     
 }

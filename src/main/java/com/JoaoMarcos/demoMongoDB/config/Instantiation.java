@@ -22,8 +22,7 @@ public class Instantiation implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // Opcional: Limpa a coleção antes do seeding para evitar duplicatas em cada reinício
-        // Cuidado: Isso apagará todos os dados existentes na coleção 'user'
+        // Limpa a coleção antes do seeding para evitar duplicatas em cada reinício
         userRepository.deleteAll();
 
         // Carrega o arquivo JSON do classpath (deve estar em src/main/resources)
