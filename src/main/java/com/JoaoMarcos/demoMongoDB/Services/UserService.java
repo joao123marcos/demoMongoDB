@@ -53,4 +53,12 @@ public class UserService {
     public  User fromDTO(UserDTO userDTO){
         return new User(userDTO.getId(), userDTO.getNome(), userDTO.getEmail());
     }
+
+    public void deleteUser(User obj){
+        if (obj != null){
+            userRepository.deleteById(obj.getId());
+        }else{
+            throw new RuntimeException("Object invalid");
+        }
+    }
 }
