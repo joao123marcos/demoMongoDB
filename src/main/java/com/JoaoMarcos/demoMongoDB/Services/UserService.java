@@ -55,7 +55,7 @@ public class UserService {
     }
 
     public void deleteUser(String idUserDelete){
-        if (idUserDelete != null){
+        if (idUserDelete != " "){
            Optional<User> userMongoDB = userRepository.findById(idUserDelete);
            if (userMongoDB.isPresent()) {
               userRepository.deleteById(idUserDelete);
