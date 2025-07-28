@@ -61,4 +61,19 @@ public class UserService {
             throw new RuntimeException("Object invalid");
         }
     }
+
+    public void updateUser(User user){
+        Optional<User> newUser = userRepository.findById(user.getId());
+        if (newUser.isPresent()) {
+            User userNew = newUser.get();
+            updateDataUser(userNew, user);
+        }else{
+            throw new RuntimeException("Object user not found");
+        }
+    }
+
+    private void updateDataUser(User userNew, User user) {
+        userNew.setEmail(user.getEmail());
+        userNew.setNome(user.getNome());
+    }
 }
