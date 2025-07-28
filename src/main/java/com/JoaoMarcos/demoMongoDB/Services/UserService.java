@@ -63,10 +63,10 @@ public class UserService {
     }
 
     public void updateUser(User user){
-        Optional<User> newUser = userRepository.findById(user.getId());
-        if (newUser.isPresent()) {
-            User userNew = newUser.get();
-            updateDataUser(userNew, user);
+        Optional<User> userMongoDB = userRepository.findById(user.getId());
+        if (userMongoDB.isPresent()) {
+            User newUser = userMongoDB.get();
+            updateDataUser(newUser, user);
         }else{
             throw new RuntimeException("Object user not found");
         }
@@ -75,5 +75,7 @@ public class UserService {
     private void updateDataUser(User userNew, User user) {
         userNew.setEmail(user.getEmail());
         userNew.setNome(user.getNome());
+
+        userRepository.save(userNew);
     }
 }
