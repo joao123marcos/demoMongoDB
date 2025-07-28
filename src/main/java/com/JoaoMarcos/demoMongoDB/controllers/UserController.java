@@ -42,10 +42,9 @@ public class UserController {
         return  ResponseEntity.created(uri).build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteUser(@RequestBody UserDTO objDto){
-        User user = userService.fromDTO(objDto);
-        userService.deleteUser(user);
+    @DeleteMapping(value = "/{idUser}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String idUser){
+        userService.deleteUser(idUser);
 
         return ResponseEntity.noContent().build();
     }

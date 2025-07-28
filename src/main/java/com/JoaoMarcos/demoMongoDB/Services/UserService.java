@@ -54,11 +54,16 @@ public class UserService {
         return new User(userDTO.getId(), userDTO.getNome(), userDTO.getEmail());
     }
 
-    public void deleteUser(User obj){
-        if (obj != null){
-            userRepository.deleteById(obj.getId());
+    public void deleteUser(String idUserDelete){
+        if (idUserDelete != null){
+           Optional<User> userMongoDB = userRepository.findById(idUserDelete);
+           if (userMongoDB.isPresent()) {
+              userRepository.deleteById(idUserDelete);
+            }else{
+                throw new RuntimeException("Id user not exist");
+            }     
         }else{
-            throw new RuntimeException("Object invalid");
+            throw new RuntimeException("Id user invalid");
         }
     }
 
