@@ -12,15 +12,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import com.JoaoMarcos.demoMongoDB.DTO.AuthorDTO; 
+import com.JoaoMarcos.demoMongoDB.DTO.AuthorDTO;
 import com.JoaoMarcos.demoMongoDB.Repositories.PostRepository;
 import com.JoaoMarcos.demoMongoDB.Repositories.UserRepository;
-import com.JoaoMarcos.demoMongoDB.domain.Post; 
+import com.JoaoMarcos.demoMongoDB.domain.Post;
 import com.JoaoMarcos.demoMongoDB.domain.User;
+import com.fasterxml.jackson.databind.DeserializationFeature; // Importar para ignorar campos desconhecidos
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature; // Importar SerializationFeature para lidar com datas
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule; // Importar JavaTimeModule
-import com.fasterxml.jackson.databind.DeserializationFeature; // Importar para ignorar campos desconhecidos
 
 @Configuration
 public class Instantiation implements CommandLineRunner {

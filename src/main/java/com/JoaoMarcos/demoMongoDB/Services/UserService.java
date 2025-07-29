@@ -83,4 +83,18 @@ public class UserService {
 
         userRepository.save(userNew);
     }
+
+    public User findUser(String idUser){
+       if (idUser != " "){
+            Optional<User> opUser = userRepository.findById(idUser);
+            if (opUser.isPresent()){
+                User user = opUser.get();
+                return user;
+            }else {
+                throw new ObjectNotfound(idUser);
+            }
+        }else {
+            throw new NoResourceFoundException("Id user invalid");
+        } 
+    }
 }

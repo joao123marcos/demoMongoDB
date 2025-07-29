@@ -3,6 +3,7 @@ package com.JoaoMarcos.demoMongoDB.controllers;
 import java.net.URI;
 import java.util.List;
 
+import com.JoaoMarcos.demoMongoDB.domain.Post;
 import com.JoaoMarcos.demoMongoDB.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,12 @@ public class UserController {
         userService.updateUser(user);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{idUser}/posts")
+    public ResponseEntity<List<Post>> findPost(@PathVariable String idUser){
+        User user = userService.findUser(idUser);
+        return ResponseEntity.ok().body(user.getListPost());
     }
     
 }

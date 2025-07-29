@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.JoaoMarcos.demoMongoDB.DTO.AuthorDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,10 @@ public class Post implements Serializable{
 
     @Id
     private String IdPost;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime date;
+    
     private String titlePost;
     private String bodyPost;
     private AuthorDTO authorPost;
