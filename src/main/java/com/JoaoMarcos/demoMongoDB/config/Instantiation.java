@@ -117,5 +117,19 @@ public class Instantiation implements CommandLineRunner {
         } else {
             System.out.println("Não foi dessa vez para posts!!!");
         }
+
+        /////////////////Referenciando os posts na coleção user
+        
+        List<Post> listPost = postRepository.findAll();
+
+        int limit = Math.min(persistedUsers.size(), listPost.size());
+
+        for (int i = 0; i < limit; i++) {
+            /*if (persistedUsers.get(i).getListPost() == null) {
+                persistedUsers.get(i).setListPost(new java.util.ArrayList<>());
+            }*/
+            persistedUsers.get(i).getListPost().add(listPost.get(i));
+            userRepository.save(persistedUsers.get(i)); 
+        }
     }
 }
