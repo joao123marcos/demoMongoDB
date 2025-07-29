@@ -1,9 +1,10 @@
 package com.JoaoMarcos.demoMongoDB.config;
 
 import java.io.InputStream;
-import java.time.LocalDateTime; // Importar LocalDateTime
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random; // Importar Random para seleção aleatória
 import java.util.stream.Collectors; // Importar Collectors
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import com.JoaoMarcos.demoMongoDB.DTO.AuthorDTO; 
 import com.JoaoMarcos.demoMongoDB.Repositories.PostRepository;
 import com.JoaoMarcos.demoMongoDB.Repositories.UserRepository;
-import com.JoaoMarcos.demoMongoDB.domain.Post; // Importar Post
+import com.JoaoMarcos.demoMongoDB.domain.Post; 
 import com.JoaoMarcos.demoMongoDB.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature; // Importar SerializationFeature para lidar com datas
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule; // Importar JavaTimeModule
+import com.fasterxml.jackson.databind.DeserializationFeature; // Importar para ignorar campos desconhecidos
 
 @Configuration
 public class Instantiation implements CommandLineRunner {
@@ -31,19 +34,22 @@ public class Instantiation implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // Limpa a coleção de usuários antes do seeding para evitar duplicatas em cada reinício
+        /* Limpa a coleção de usuários antes do seeding para evitar 
+        duplicatas em cada reinício*/
         userRepository.deleteAll();
 
         // Carrega o arquivo JSON do classpath (deve estar em src/main/resources)
-        ClassPathResource userResource = new 
-          ClassPathResource("cursomongodb.user.json");
-          
+        ClassPathResource userResource = 
+          new ClassPathResource("cursomongodb.user.json");
+
         InputStream userInputStream = userResource.getInputStream();
 
-        // Usa Jackson ObjectMapper para ler o JSON e mapear para uma lista de objetos User
-        ObjectMapper objectMapper = new ObjectMapper();
+        /*Usa Jackson ObjectMapper para ler o JSON e mapear para uma 
+        lista de objetos user */
+        ObjectMapper objectMapperForUsers = new ObjectMapper();
         List<User> users = Arrays.asList(
-            objectMapper.readValue(userInputStream, User[].class));
+                objectMapperForUsers.readValue(userInputStream, 
+                User[].class));
 
         // Insere a lista de usuários na coleção
         userRepository.saveAll(users);
@@ -54,30 +60,52 @@ public class Instantiation implements CommandLineRunner {
             System.out.println("Não foi dessa vez para usuários!!!");
         }
 
-        ///////////////////////Seção do post //////////////////////////////
+        List<User> persistedUsers = userRepository.findAll();
+        if (persistedUsers.isEmpty()) {
+            System.err.println(
+                    "Erro: Nenhum usuário foi persistido no banco de dados. "+
+                    "Os posts não terão autores válidos.");
+            return; // Interrompe se não houver usuários para associar
+        }
+
+        /////////////////////// Seção do post //////////////////////////////
         postRepository.deleteAll();
 
-        ClassPathResource postResource = new 
-            ClassPathResource("cursomongodb.post.json");
+        ClassPathResource postResource = 
+          new ClassPathResource("cursomongodb.post.json");
 
         InputStream postInputStream = postResource.getInputStream();
 
-        // Configurandp ObjectMapper para lidar com tipos de data/hora do Java 8
-        // Recria ou reconfigura o ObjectMapper para posts
-        objectMapper = new ObjectMapper();
-        
-        // Registra o módulo para java.time
-        objectMapper.registerModule(new JavaTimeModule()); 
-        
-        // Opcional: para formatar datas como ISO 8601 strings
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); 
+        // Configura ObjectMapper para lidar com tipos de data/hora do Java 8
+        ObjectMapper objectMapperForPosts = new ObjectMapper();
+        objectMapperForPosts.registerModule(new JavaTimeModule());
+        objectMapperForPosts.disable(
+            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        /*IMPORTANTE: Ignorar campos não reconhecidos, como "authorPost" do JSON,
+         pois queremos atribuí-lo manualmente*/
+        objectMapperForPosts.configure(
+            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         List<Post> postsFromJson = Arrays.asList(
-            objectMapper.readValue(postInputStream, Post[].class));
+                objectMapperForPosts.readValue(postInputStream, 
+                Post[].class));
 
-        // Itera sobre os posts deserializados e define a data dinamicamente
+        Random random = new Random(); // Para selecionar um autor aleatoriamente
+
+        /*Itera sobre os posts deserializados e define a data dinamicamente e 
+        associa um autor*/
         List<Post> postsToSave = postsFromJson.stream().map(post -> {
             post.setDate(LocalDateTime.now()); // Define a data atual
+
+            /*Atribui um autor da lista de usuários persistidos.
+              Para garantir que cada post tenha um autor válido e que o 
+              AuthorDTO seja criado corretamente.*/
+            User selectedUser = persistedUsers.get(
+                random.nextInt(persistedUsers.size()));
+
+            post.setAuthorPost(new AuthorDTO(selectedUser)); 
+
             return post;
         }).collect(Collectors.toList());
 

@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.JoaoMarcos.demoMongoDB.DTO.AuthorDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -26,5 +29,5 @@ public class Post implements Serializable{
     private LocalDateTime date;
     private String titlePost;
     private String bodyPost;
-    private User authorPost;
+    private AuthorDTO authorPost;
 }
