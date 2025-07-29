@@ -1,0 +1,34 @@
+[
+  {
+    "titlePost": "Partiu viagem",
+    "bodyPost": "Vou viajar para São Paulo. Abraços!",
+    "authorPost": {
+      "id": "1001",
+      "nome": "Carlos"
+    }
+  },
+  {
+    "titlePost": "Hoje eu tô de boas",
+    "bodyPost": "Débora é a melhor namorada do mundo",
+    "authorPost": {
+      "id": "1002",
+      "nome": "João Marcos"
+    }
+  },
+  {
+    "titlePost": "Hoje podia chover",
+    "bodyPost": "Não quero ir à academia",
+    "authorPost": {
+      "id": "1002",
+      "nome": "João Marcos"
+    }
+  },
+  {
+    "titlePost": "Batman é o melhor herói",
+    "bodyPost": "Porque é inteligente e tem muita estratégia pra lutar e vencer",
+    "authorPost": {
+      "id": "1003",
+      "nome": "João Marcelo"
+    }
+  }
+]
