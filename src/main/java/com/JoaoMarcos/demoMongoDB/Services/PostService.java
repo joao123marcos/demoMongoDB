@@ -33,6 +33,6 @@ public class PostService {
     }
 
     public List<Post> findByTitlePost(String text){
-        return postRepository.findByTitlePostContainingIgnoreCase(text);
+        return postRepository.findTitleRegex(text);
     }
 }
