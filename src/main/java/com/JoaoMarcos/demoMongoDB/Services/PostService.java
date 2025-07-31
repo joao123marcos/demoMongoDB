@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.JoaoMarcos.demoMongoDB.Repositories.PostRepository;
-import com.JoaoMarcos.demoMongoDB.Services.Execptions.ObjectNotfound; 
+import com.JoaoMarcos.demoMongoDB.Services.Execptions.ObjectNotfound;
 import com.JoaoMarcos.demoMongoDB.domain.Post;
 
 @Service
@@ -30,5 +30,9 @@ public class PostService {
         } else {
             throw new ObjectNotfound(idPost);
         }
+    }
+
+    public List<Post> findByTitlePost(String text){
+        return postRepository.findByTitlePostContainingIgnoreCase(text);
     }
 }
