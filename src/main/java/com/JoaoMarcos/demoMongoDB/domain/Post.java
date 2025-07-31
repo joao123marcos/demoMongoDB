@@ -25,7 +25,7 @@ public class Post implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String IdPost;
+    private String idPost;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime date;

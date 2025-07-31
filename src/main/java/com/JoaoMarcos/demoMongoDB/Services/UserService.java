@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public  User fromDTO(UserDTO userDTO){
-        return new User(userDTO.getId(), userDTO.getNome(), userDTO.getEmail(), null);
+        return new User(userDTO.getId(), userDTO.getNome(), userDTO.getEmail());
     }
 
     public void deleteUser(String idUserDelete){

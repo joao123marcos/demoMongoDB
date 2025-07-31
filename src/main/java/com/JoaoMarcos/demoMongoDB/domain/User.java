@@ -8,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
 @Document
 
@@ -28,7 +26,14 @@ public class User implements Serializable{
     private String id;
     private String nome;
     private String email;
+
+
+    public User(String id, String nome, String e){
+        this.id = id;
+        this.nome = nome;
+        this.email = e;
+    }
     
     @DBRef(lazy = true)
-    List<Post> listPost = new ArrayList<>();
+    private List<Post> listPost = new ArrayList<>();
 }
