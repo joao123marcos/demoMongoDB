@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class URL {
-    
-    public static String decodeParam(String param){
+
+    public static String decodeParam(String param) {
         try {
             return URLDecoder.decode(param, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -16,26 +16,34 @@ public class URL {
         }
     }
 
-    public static LocalDateTime convertDate(String textDate, boolean isMaxDate){
-        
+    public static LocalDateTime convertDate(String textDate, boolean isMaxDate) {
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date;
 
-        if (isMaxDate) {
-            if ((textDate == null) || (textDate.isEmpty())) {
-                return null;
+       try {
+            if (isMaxDate) {
+                if ((textDate == null) || (textDate.isEmpty())) {
+                    return null;
+                } else {
+                    date = LocalDate.parse(textDate, dtf);
+                    return date.atTime(23, 59, 59);
+                }
             } else {
-                date = LocalDate.parse(textDate, dtf);
-                return date.atTime(23, 59, 59);
+                if ((textDate == null) || (textDate.isEmpty())) {
+                    return null;
+                } else {
+
+                    date = LocalDate.parse(textDate, dtf);
+                    return date.atTime(0, 0, 0);
+
+                }
+
             }
-        }else{
-            if ((textDate == null) || (textDate.isEmpty())) {
-                return null;
-            } else {
-                date = LocalDate.parse(textDate, dtf);
-                return date.atTime(0, 0, 0);
-            }    
-            
+        } catch (java.time.format.DateTimeParseException e) {
+            throw new com.JoaoMarcos.demoMongoDB.Services.Execptions.DateTimeParseException(
+                    "The text "+textDate+" cannot be converted to a valid date format.");
         }
+
     }
 }
