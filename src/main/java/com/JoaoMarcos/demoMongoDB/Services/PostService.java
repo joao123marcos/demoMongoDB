@@ -1,5 +1,6 @@
 package com.JoaoMarcos.demoMongoDB.Services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.JoaoMarcos.demoMongoDB.Repositories.PostRepository;
 import com.JoaoMarcos.demoMongoDB.Services.Execptions.ObjectNotfound;
+import com.JoaoMarcos.demoMongoDB.controllers.Util.URL;
 import com.JoaoMarcos.demoMongoDB.domain.Post;
 
 @Service
@@ -34,5 +36,27 @@ public class PostService {
 
     public List<Post> findByTitlePost(String text){
         return postRepository.findTitleRegex(text);
+    }
+
+    public List<Post> fullSearch(String text, String minDate, String maxDate){
+        
+        if (text == null || text.isEmpty()) {
+            throw new RuntimeException("param is not valid");
+        } else {
+            text = URL.decodeParam(text);
+        }
+        
+        LocalDateTime minDateTime = URL.convertDate(minDate, false);
+        LocalDateTime maxDateTime = URL.convertDate(maxDate, true);
+
+        if (minDateTime == null ) {
+            minDateTime = maxDateTime.withHour(0).withMinute(0).withSecond(0);
+        }
+
+        if (maxDateTime == null) {
+            maxDateTime = minDateTime.withHour(23).withMinute(59).withSecond(59);
+        }
+        
+        return postRepository.fullSearch(text, minDateTime, maxDateTime);
     }
 }

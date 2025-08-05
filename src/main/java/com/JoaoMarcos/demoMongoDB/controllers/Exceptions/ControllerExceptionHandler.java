@@ -26,7 +26,8 @@ public class ControllerExceptionHandler {
  }
 
    @ExceptionHandler(NoResourceFoundException.class)
-   public ResponseEntity<StandardError> noResourceFoundFound(NoResourceFoundException e, HttpServletRequest request){
+   public ResponseEntity<StandardError> noResourceFoundFound(NoResourceFoundException e, 
+     HttpServletRequest request){
 
        String defaultError = "Resource not found ";
        HttpStatus status = HttpStatus.BAD_REQUEST;
