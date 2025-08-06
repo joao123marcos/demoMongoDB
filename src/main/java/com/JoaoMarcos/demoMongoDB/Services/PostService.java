@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.JoaoMarcos.demoMongoDB.Repositories.PostRepository;
 import com.JoaoMarcos.demoMongoDB.Services.Execptions.NoResourceFoundException;
-import com.JoaoMarcos.demoMongoDB.Services.Execptions.IllegalArgumentException;
 import com.JoaoMarcos.demoMongoDB.Services.Execptions.ObjectNotfound;
 import com.JoaoMarcos.demoMongoDB.controllers.Util.URL;
 import com.JoaoMarcos.demoMongoDB.domain.Post;
@@ -25,14 +24,23 @@ public class PostService {
     }
 
     public Post findById(String idPost) {
-        String teste = idPost;
-        System.out.println("idPost: " + teste);
 
-        Optional<Post> opPost = postRepository.findById(idPost);
-        if (opPost.isPresent()) {
-            return opPost.get();
+        int tam = idPost.length();
+        System.out.println(tam);
+
+        if (idPost.length() != 24 || idPost == null || idPost.isEmpty()) {
+            throw new NoResourceFoundException("The parameter " +idPost+ " is void or empty or "+
+             "is not a valid ObjectId format!");
         } else {
-            throw new ObjectNotfound(idPost);
+            String teste = idPost;
+            System.out.println("idPost: " + teste);
+
+            Optional<Post> opPost = postRepository.findById(idPost);
+            if (opPost.isPresent()) {
+                return opPost.get();
+            } else {
+                throw new ObjectNotfound(idPost);
+            }
         }
     }
 
@@ -62,9 +70,10 @@ public class PostService {
         }
 
         if (minDateTime.isAfter(maxDateTime)) {
-            throw new IllegalArgumentException("A data mínima não pode ser posterior "+
-                "à data máxima, nem vice versa");
-            
+            throw new com.JoaoMarcos.demoMongoDB.Services.Execptions.IllegalArgumentException(
+                    "A data mínima não pode ser posterior " +
+                            "à data máxima, nem vice versa");
+
         }
         return postRepository.fullSearch(text, minDateTime, maxDateTime);
     }

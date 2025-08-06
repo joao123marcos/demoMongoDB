@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.JoaoMarcos.demoMongoDB.Services.Execptions.DateTimeParseException;
 import com.JoaoMarcos.demoMongoDB.Services.Execptions.NoResourceFoundException;
 import com.JoaoMarcos.demoMongoDB.Services.Execptions.ObjectNotfound;
+import com.JoaoMarcos.demoMongoDB.Services.Execptions.IllegalArgumentException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -18,9 +19,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ControllerExceptionHandler {
 
  @ExceptionHandler(ObjectNotfound.class)
- public ResponseEntity<StandardError> resourceNotFound(ObjectNotfound e, HttpServletRequest request){
+ public ResponseEntity<StandardError> objectNotFound(ObjectNotfound e, HttpServletRequest request){
 
-     String defaultError = "Resource not found ";
+     String defaultError = "Object not found ";
      HttpStatus status = HttpStatus.NOT_FOUND;
      StandardError erro = new StandardError(Instant.now(), status.value(), defaultError, e.getMessage(),
              request.getRequestURI());
