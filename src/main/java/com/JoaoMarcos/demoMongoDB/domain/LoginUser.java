@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.JoaoMarcos.demoMongoDB.Enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -28,6 +29,8 @@ public class LoginUser implements UserDetails{
     @Id
     private String idLoginUser;
     private String loginUser;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordUser;
     private UserRole role;
 
@@ -36,18 +39,19 @@ public class LoginUser implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         /*Se o usuário for admin retorna as duas roles dele */
         if (this.role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), 
-            new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority("ADMIN"), 
+            new SimpleGrantedAuthority("USER"));
         }else{
             /*Senão, retorna só a role de user */
-            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority("USER"));
         }
     }
+
     @Override
     public String getPassword() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+        return this.passwordUser;
     }
+
     @Override
     public String getUsername() {
         return this.loginUser;
