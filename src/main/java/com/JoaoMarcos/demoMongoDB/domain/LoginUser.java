@@ -39,7 +39,7 @@ public class LoginUser implements UserDetails{
     private String passwordUser;
     private UserRole role;
 
-
+    /*Método responsável por retornar as roles que cada usuário tem */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         /*Se o usuário for admin retorna as duas roles dele */
