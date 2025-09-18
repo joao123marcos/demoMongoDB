@@ -20,7 +20,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "idLoginUser")
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
