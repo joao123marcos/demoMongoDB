@@ -29,7 +29,12 @@ public class LoginUser implements UserDetails{
     @Id
     private String idLoginUser;
     private String loginUser;
-
+    
+   /*
+    * A anotação @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) é a solução
+    * profissional: ela permite que a senha seja recebida em um JSON (como no 
+    * cadastro), mas proíbe que ela seja enviada em uma resposta
+    */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordUser;
     private UserRole role;
