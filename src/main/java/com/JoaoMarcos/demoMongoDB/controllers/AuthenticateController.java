@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.JoaoMarcos.demoMongoDB.DTO.AuthenticateUserDTO;
+import com.JoaoMarcos.demoMongoDB.DTO.LoginResponseDTO;
 import com.JoaoMarcos.demoMongoDB.DTO.RegisterUserDto;
 import com.JoaoMarcos.demoMongoDB.Services.LoginUserService;
+import com.JoaoMarcos.demoMongoDB.Services.TokenService;
 import com.JoaoMarcos.demoMongoDB.domain.LoginUser;
 
 import jakarta.validation.Valid;
@@ -30,6 +32,9 @@ public class AuthenticateController {
     @Autowired
     public LoginUserService loginUserService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticateUserDTO data){
         
@@ -40,7 +45,10 @@ public class AuthenticateController {
         //Auntentica o usuário
         var authenticated = authenticationManager.authenticate(userNamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken(
+            (LoginUser)authenticated.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(null));
         
     }
 
