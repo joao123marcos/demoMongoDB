@@ -27,24 +27,23 @@ public class SecurityFilter extends OncePerRequestFilter{
     LoginUserRepository loginUserRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
+protected void doFilterInternal(HttpServletRequest request, 
      HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
       
-        var token = this.recoverToken(request);
-        if (token != null) {
-            var subject = tokenService.validateToken(token);
-            UserDetails user = loginUserRepository.findByLoginUser(subject);
+    var token = this.recoverToken(request);
+    if (token != null) {
+        var subject = tokenService.validateToken(token);
+        UserDetails user = loginUserRepository.findByLoginUser(subject);
 
-            var authenticatin = new UsernamePasswordAuthenticationToken(
-                user, null, user.getAuthorities());
-            
-            SecurityContextHolder.getContext().setAuthentication(authenticatin);
-        }else{
-            filterChain.doFilter(request, response);
-        }
-
+        var authenticatin = new UsernamePasswordAuthenticationToken(
+            user, null, user.getAuthorities());
+        
+        SecurityContextHolder.getContext().setAuthentication(authenticatin);
     }
+    // Chame o próximo filtro na corrente.
+    filterChain.doFilter(request, response);
+}
     
     private String recoverToken(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
@@ -52,7 +51,7 @@ public class SecurityFilter extends OncePerRequestFilter{
         if (authHeader == null) {
             return null;   
         }else{
-            return authHeader.replace("Bearer", "");
+            return authHeader.replace("Bearer ", "");
         }
     }
 }

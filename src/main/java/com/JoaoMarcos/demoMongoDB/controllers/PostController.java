@@ -27,12 +27,6 @@ public class PostController {
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping(value = {"", "/"})
-    public ResponseEntity<List<Post>> handleEmptyIdRequest(){
-       throw new com.JoaoMarcos.demoMongoDB.Services.Execptions.
-        NoResourceFoundException("Post ID not provided in URL.");
-    }
-
     @GetMapping(value = "/{idPost}")
     public ResponseEntity<Post> findById(@PathVariable String idPost){
         Post post = postService.findById(idPost);

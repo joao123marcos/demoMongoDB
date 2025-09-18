@@ -42,18 +42,19 @@ public class AuthenticateController {
         var userNamePassword = new UsernamePasswordAuthenticationToken
               (data.login(), data.password());
         
-        //Auntentica o usuário
+        //Auntentica o usuário pelo authenticationManager
         var authenticated = authenticationManager.authenticate(userNamePassword);
 
         var token = tokenService.generateToken(
             (LoginUser)authenticated.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(null));
+        return ResponseEntity.ok(new LoginResponseDTO(token));
         
     }
 
     @PostMapping("/register")
-    public ResponseEntity registerUser(@RequestBody @Valid RegisterUserDto data) throws Exception{
+    public ResponseEntity registerUser(@RequestBody @Valid RegisterUserDto data) 
+    throws Exception{
         
         LoginUser u = loginUserService.insertUserLogin(data);
         

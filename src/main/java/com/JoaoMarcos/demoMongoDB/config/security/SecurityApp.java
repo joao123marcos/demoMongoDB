@@ -21,7 +21,7 @@ public class SecurityApp {
     @Autowired
     public SecurityFilter securityFilter;
 
-
+    //Corrente de filtros para as requisições
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) 
       throws Exception {
@@ -66,6 +66,8 @@ public class SecurityApp {
     public AuthenticationManager authenticationManager 
      (AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
+
+        //Retorna uma instância do authenticationManager
     }
 
     @Bean
