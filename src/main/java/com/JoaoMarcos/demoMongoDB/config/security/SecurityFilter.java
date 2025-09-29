@@ -27,7 +27,7 @@ public class SecurityFilter extends OncePerRequestFilter{
     LoginUserRepository loginUserRepository;
 
     @Override
-protected void doFilterInternal(HttpServletRequest request, 
+    protected void doFilterInternal(HttpServletRequest request, 
      HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
       
@@ -43,7 +43,7 @@ protected void doFilterInternal(HttpServletRequest request,
     }
     // Chame o próximo filtro na corrente.
     filterChain.doFilter(request, response);
-}
+    }
     
     private String recoverToken(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
